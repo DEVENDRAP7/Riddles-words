@@ -5,7 +5,7 @@ Part of the **Riddles** brand (5-app family). See brand strategy in `../PLAN.md`
 ## This App
 - **Category:** wordplay, anagrams, word riddles.
 - **Repo:** https://github.com/DEVENDRAP7/Riddles-words.git
-- **Package id (planned):** `com.riddles.words` (confirm before build).
+- **Package id (FINAL, permanent):** `com.devendrap7.riddles.words`
 - **Accent color:** green. Glyph: letters.
 - **Privacy policy URL:** TBD (separate per app).
 
