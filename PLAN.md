@@ -24,7 +24,7 @@ Part of the **Riddles** brand (5-app family). See brand strategy in `../PLAN.md`
 - **Repo:** https://github.com/DEVENDRAP7/Riddles-words.git
 - **Package id (FINAL, permanent):** `com.devendrap7.riddles.words`
 - **Accent color:** green. Glyph: letters.
-- **Privacy policy URL:** TBD (separate per app).
+- **Privacy policy URL:** https://devendrap7.github.io/Riddles-words/privacy-policy.html (live, GitHub Pages).
 
 ## Brand Constraints (all 5 apps)
 - Android only — no iOS.
