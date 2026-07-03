@@ -29,7 +29,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Future<void> _boot() async {
     // Minimum splash time so the logo animation is visible.
     final wait = Future<void>.delayed(const Duration(milliseconds: 1400));
-    await ref.read(adsServiceProvider).showAppOpen();
+    final ads = ref.read(adsServiceProvider);
+    // UMP consent form (if required) must precede any ad request.
+    await ads.gatherConsentAndInit();
+    await ads.showAppOpen();
     await wait;
     if (!mounted) return;
     final onboarded = ref.read(settingsProvider).onboarded;

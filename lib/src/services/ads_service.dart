@@ -14,6 +14,52 @@ class AdsService {
 
   InterstitialAd? _interstitial;
   int _solvesSinceInterstitial = 0;
+  bool _sdkInitialized = false;
+
+  /// GDPR/UMP consent flow. Must run before any ad request: updates consent
+  /// info, shows the consent form if required (EEA users), then initializes
+  /// the Mobile Ads SDK only when consent allows ad requests.
+  Future<void> gatherConsentAndInit() async {
+    final completer = Completer<void>();
+    ConsentInformation.instance.requestConsentInfoUpdate(
+      ConsentRequestParameters(),
+      () {
+        ConsentForm.loadAndShowConsentFormIfRequired((formError) {
+          if (!completer.isCompleted) completer.complete();
+        });
+      },
+      (error) {
+        if (!completer.isCompleted) completer.complete();
+      },
+    );
+    // Don't hang the splash if UMP can't be reached (offline).
+    await completer.future.timeout(const Duration(seconds: 8), onTimeout: () {});
+    await _initSdkIfAllowed();
+  }
+
+  Future<void> _initSdkIfAllowed() async {
+    if (_sdkInitialized) return;
+    if (await ConsentInformation.instance.canRequestAds()) {
+      _sdkInitialized = true;
+      await MobileAds.instance.initialize();
+    }
+  }
+
+  /// Whether settings should surface a "Privacy options" entry
+  /// (required for EEA users under UMP).
+  Future<bool> isPrivacyOptionsRequired() async =>
+      await ConsentInformation.instance.getPrivacyOptionsRequirementStatus() ==
+      PrivacyOptionsRequirementStatus.required;
+
+  /// Lets the user revisit their consent choices from settings.
+  Future<void> showPrivacyOptionsForm() async {
+    final completer = Completer<void>();
+    await ConsentForm.showPrivacyOptionsForm((formError) {
+      if (!completer.isCompleted) completer.complete();
+    });
+    await completer.future;
+    await _initSdkIfAllowed();
+  }
 
   /// Loads and shows the app-open ad; resolves once dismissed/failed.
   /// [timeout] keeps the splash from hanging when offline.

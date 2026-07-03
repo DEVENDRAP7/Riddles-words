@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../services/ads_service.dart';
 import '../state/settings_provider.dart';
 
 const _storeUrl =
@@ -52,6 +53,20 @@ class SettingsScreen extends ConsumerWidget {
             title: const Text('Privacy policy'),
             onTap: () => launchUrl(Uri.parse(_privacyUrl),
                 mode: LaunchMode.externalApplication),
+          ),
+          // UMP: EEA users must be able to revisit consent choices.
+          FutureBuilder<bool>(
+            future: ref.read(adsServiceProvider).isPrivacyOptionsRequired(),
+            builder: (context, snapshot) {
+              if (snapshot.data != true) return const SizedBox.shrink();
+              return ListTile(
+                leading: const Icon(Icons.ads_click_rounded),
+                title: const Text('Ad privacy options'),
+                subtitle: const Text('Manage your consent choices'),
+                onTap: () =>
+                    ref.read(adsServiceProvider).showPrivacyOptionsForm(),
+              );
+            },
           ),
           const Divider(),
           const ListTile(
