@@ -52,4 +52,8 @@ Part of the **Riddles** brand (5-app family). See brand strategy in `../PLAN.md`
 - Flutter, Riverpod, Hive, go_router, google_mobile_ads.
 
 ## Status
-- [ ] Not started. Awaiting build command. Do NOT code until user says go.
+- [x] App built (Flutter template v1): splash → onboarding → home grid → play loop, hints/solution via rewarded ads, settings, 100-level content JSON.
+- [x] CI: `.github/workflows/build-apk.yml` builds release APK on push to main (artifact `riddles-words-apk`).
+- [ ] Replace AdMob TEST ids (manifest app id + `lib/src/services/ads_service.dart` unit ids) with real ones before release.
+- [ ] Add Firebase Analytics + Crashlytics (needs this app's own `google-services.json`).
+- [ ] Real app icon + release signing keystore.
