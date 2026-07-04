@@ -28,8 +28,19 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
+}
+
+dependencies {
+    // google_mobile_ads 9.x pulls androidx.work 2.7.0, which crashes at app
+    // startup in release mode with AGP 9 (InitializationProvider failure).
+    // Force a current version. googleads-mobile-flutter#1444
+    implementation("androidx.work:work-runtime:2.11.2")
 }
 
 kotlin {
